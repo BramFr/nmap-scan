@@ -67,9 +67,9 @@ def _formatResult(nm):
 
 
 def _main():
-    if os.getuid() != 0:
-        print("This program requires root privileges.  Run as root using 'sudo'.")
-        # sys.exit()
+    # if os.getuid() != 0:
+    #     print("This program requires root privileges.  Run as root using 'sudo'.")
+    #     sys.exit()
 
     if not _valid_ip(ip_range):
         print("Wrong IP. please give something like: 172.25.0.25 or 172.25.0.0/24")
