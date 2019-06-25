@@ -6,8 +6,8 @@ import socket
 from tabulate import tabulate
 
 
-ip_range = sys.argv[1].split('/')
-# ip_range = ['172.16.0.0','24']
+# ip_range = sys.argv[1].split('/')
+ip_range = ['172.16.161.0','24']
 
 
 def _valid_ip(ip_range):
@@ -23,12 +23,18 @@ def _nmapscan(ip_range):
     else:
         scan_ip = ip_range[0]
 
+    nm_ping = nmap.PortScanner()
+    nm_ping.scan(hosts=scan_ip, arguments='-sP', sudo=True)
     nm = nmap.PortScanner()
-    nm.scan(hosts=scan_ip, arguments='-Pn -p23,22,443,80,3389,445,139')
+    nm.scan(
+        hosts=scan_ip,
+        arguments='-Pn -p1,23,22,443,80,3389,445,139',
+        sudo=True)
 
-    return _formatResult(nm)
+    return _formatResult(nm, nm_ping)
 
-def _formatResult(nm):
+
+def _formatResult(nm, nm_ping):
     hosts_list = []
     for x in nm.all_hosts():
         host_list = []
@@ -40,12 +46,16 @@ def _formatResult(nm):
         Check if any port is open. 
         If some port is open state will be up
         '''
-        for port_status in nm[x]['tcp']:
-            if nm[x]['tcp'][port_status]['state'] == 'open':
+        if x in nm_ping.all_hosts():
+            if nm_ping[x]['status']['state'] == 'up':
                 host_list.append('up')
-                break
         else:
-            host_list.append('down')
+            for port_status in nm[x]['tcp']:
+                if nm[x]['tcp'][port_status]['state'] == 'open':
+                    host_list.append('up')
+                    break
+            else:
+                host_list.append('down')
 
         '''Trying to get FQDN from DNS'''
         try:
@@ -61,15 +71,17 @@ def _formatResult(nm):
             host_list.append(nm[x]['addresses']['mac'])
         except:
             host_list.append('null')
+
+        # Add every entry to a new list.
         hosts_list.append(host_list)
 
     return hosts_list
 
 
 def _main():
-    # if os.getuid() != 0:
-    #     print("This program requires root privileges.  Run as root using 'sudo'.")
-    #     sys.exit()
+    if os.getuid() != 0:
+        print("This program requires root privileges.  Run as root using 'sudo'.")
+        # sys.exit()
 
     if not _valid_ip(ip_range):
         print("Wrong IP. please give something like: 172.25.0.25 or 172.25.0.0/24")
