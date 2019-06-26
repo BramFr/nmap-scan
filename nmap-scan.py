@@ -6,8 +6,8 @@ import socket
 from tabulate import tabulate
 
 
-# ip_range = sys.argv[1].split('/')
-ip_range = ['172.16.161.0','24']
+ip_range = sys.argv[1].split('/')
+# ip_range = ['172.16.161.0','24']
 
 
 def _valid_ip(ip_range):
@@ -28,7 +28,7 @@ def _nmapscan(ip_range):
     nm = nmap.PortScanner()
     nm.scan(
         hosts=scan_ip,
-        arguments='-Pn -p1,23,22,443,80,3389,445,139',
+        arguments='-Pn -p23,22,443,80,3389,445,139',
         sudo=True)
 
     return _formatResult(nm, nm_ping)
