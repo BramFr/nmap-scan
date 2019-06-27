@@ -1,6 +1,6 @@
 # nmap-scan
 
-This is a easy scan based on nmap with dns lookup. It can also find duplicate IP`s based on MAC changed.
+This is a easy scan based on nmap with dns lookup. It can also scan for duplicate IP`s based on MAC changed.
 
 ## Info
 ```console
@@ -9,7 +9,7 @@ Easy Nmap Scan ( https://github.com/BramFr/nmap-scan )
  Usage: sudo ./nmap-scan.py [Scan Type(s)] {target specification}
 
  Scan Type(s):
-    --arp for fineding duplicate IP (infinity loop)
+    --arp scan for duplicate IP (infinity loop)
 
  Example: 
      sudo ./nmap-scan.py 172.25.0.0/24 --arp

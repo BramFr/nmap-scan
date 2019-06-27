@@ -19,7 +19,7 @@ def _valid_ip(start_aggr):
             scan_ip = ip_range[0]
     except:
         print("Wrong IP. please give something like: 172.25.0.25 or 172.25.0.0/24\n\
-            use -h for more help."                                  )
+            use -h for more help."                                                                    )
         exit()
     return scan_ip
 
@@ -165,7 +165,7 @@ def _main():
         print("Easy Nmap Scan ( https://github.com/BramFr/nmap-scan )\n \
 Usage: sudo ./nmap-scan.py [Scan Type(s)] {target specification}\n\n \
 Scan Type(s):\n\
-    --arp for findeng duplicate IP (infinity loop)\n\n \
+    --arp scan for duplicate IP (infinity loop)\n\n \
 Example: \n \
     sudo ./nmap-scan.py 172.25.0.0/24 --arp\n \
     sudo ./nmap-scan.py 172.25.0.55")
