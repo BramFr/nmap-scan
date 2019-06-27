@@ -1,6 +1,9 @@
 # nmap-scan
 
-This is a easy scan based on nmap with dns lookup. It can also scan for duplicate IP`s based on MAC changed.
+This is a easy scan based on nmap with dns lookup. It will also find hosts where ICMP are blocked. 
+When ICMP its blocked it will scan for common ports like 21,22,80,443,3389. If one of these ports are open result will be up.
+
+It can also scan for duplicate IP`s based on MAC changed.
 
 ## Info
 ```console
