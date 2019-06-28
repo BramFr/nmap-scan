@@ -9,7 +9,7 @@ It can also scan for duplicate IP`s based on MAC changed.
 ```console
 # sudo ./nmap-scan.py -h
 Easy Nmap Scan ( https://github.com/BramFr/nmap-scan )
- Usage: sudo ./nmap-scan.py [Scan Type(s)] {target specification}
+ Usage: sudo ./nmap-scan.py {target specification} [Scan Type(s)]
 
  Scan Type(s):
     --arp scan for duplicate IP (infinity loop)

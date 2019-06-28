@@ -19,7 +19,7 @@ def _valid_ip(start_aggr):
             scan_ip = ip_range[0]
     except:
         print("Wrong IP. please give something like: 172.25.0.25 or 172.25.0.0/24\n\
-            use -h for more help."                                                                    )
+            use -h for more help."                                                                                                                                        )
         exit()
     return scan_ip
 
@@ -69,6 +69,11 @@ def _nmapscan_arp(scan_ip):
     nm = nmap.PortScanner()
     while True:
         nm.scan(hosts=scan_ip, arguments='-sP', sudo=True)
+
+        for host in list(arp_results):
+            if host not in nm.all_hosts():
+                arp_results.pop(host)
+
         for host in nm.all_hosts():
             if 'mac' in nm[host]['addresses']:
                 if not arp_results.get(host):
@@ -101,50 +106,6 @@ def _resolvHostname(ip_addr):
     return hostname
 
 
-def _formatResult(nm, nm_ping):
-    hosts_list = []
-    for x in nm.all_hosts():
-        host_list = []
-
-        # Added IP to list.
-        host_list.append(x)
-
-        '''
-        Check if any port is open. 
-        If some port is open state will be up
-        '''
-        if x in nm_ping.all_hosts():
-            if nm_ping[x]['status']['state'] == 'up':
-                host_list.append('up')
-        else:
-            for port_status in nm[x]['tcp']:
-                if nm[x]['tcp'][port_status]['state'] == 'open':
-                    host_list.append('up')
-                    break
-            else:
-                host_list.append('down')
-
-        '''Trying to get FQDN from DNS'''
-        try:
-            host_list.append(socket.gethostbyaddr(x)[0])
-        except:
-            host_list.append('Unknown_host')
-
-
-        '''
-        Lookup MAC address this will only work in the same network.
-        '''
-        try:
-            host_list.append(nm[x]['addresses']['mac'])
-        except:
-            host_list.append('null')
-
-        # Add every entry to a new list.
-        hosts_list.append(host_list)
-
-    return hosts_list
-
-
 def print_result(raw_result):
     pd.set_option('display.max_rows', 1000)
     df = pd.DataFrame(raw_result).T
@@ -163,7 +124,7 @@ def _main():
         exit()
     elif '-h' in start_aggr:
         print("Easy Nmap Scan ( https://github.com/BramFr/nmap-scan )\n \
-Usage: sudo ./nmap-scan.py [Scan Type(s)] {target specification}\n\n \
+Usage: sudo ./nmap-scan.py {target specification} [Scan Type(s)]\n\n \
 Scan Type(s):\n\
     --arp scan for duplicate IP (infinity loop)\n\n \
 Example: \n \
