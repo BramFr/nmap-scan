@@ -54,8 +54,6 @@ def _nmapscan_default(scan_ip):
         except:
             host_list[host]['mac'] = 'null'
     _print_result(host_list)
-    # return hosts_list
-    # return _formatResult(nm, nm_ping)
 
 
 def _nmapscan_arp(scan_ip):
@@ -80,14 +78,12 @@ def _nmapscan_arp(scan_ip):
                         arp_results[host]['ip_conflict'] = 'True'
                         arp_results[host]['diff_mac'] = nm[host]['addresses'][
                             'mac']
-                        print("HELP!!!!!")
 
                 arp_results[host]['hostname'] = _resolvHostname(host)
             else:
                 arp_results[host] = {}
                 arp_results[host]['mac'] = 'Null'
-        # print(arp_results)
-        # headers = ["Host_IP", "Status", "Hostname", "mac"]
+
         os.system('clear')
         _print_result(arp_results)
 
